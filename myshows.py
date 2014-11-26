@@ -6,7 +6,7 @@ import time
 try :
     import requests
 except ImportError:
-    print 'Please install requests module'
+    print('Please install requests module')
     sys.exit(1)
 
 def computeMD5hash(password):
