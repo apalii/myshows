@@ -1,13 +1,30 @@
-myshows
-=======
+## myshows
 
 python3+requests
 
+This script shows all unwached episodes sorted by date if they are exist. Othewise, it will show upcoming 
 
+#### Usage :
 
-[ 26.11.2014 ]
-This script shows the following information :
+```bash
+python3 myshows.py -l mylogin -p mypassword
+```
 
+#### Requirements :
+1) It is necessary to have accounts in the following social networks :
+
+`myshows.me` - for shows information
+`vk.com`  or `twitter.com` - for sms purposes
+
+2) python3 and requests module
+
+```bash
+sudo apt-get install python-pip
+sudo pip install requests
+```
+
+#### Typical output :
+```
 $ python3 myshows.py -l mylogin -p mupasswd
 New episodes are:
 Физрук Физрук: серия 31 25.11.2014
@@ -22,7 +39,8 @@ Show: Физрук             | s:2 | e:15 | Date:02.12.2014
 Show: Физрук             | s:2 | e:16 | Date:03.12.2014
 Show: Физрук             | s:2 | e:17 | Date:04.12.2014
 Show: Game of Thrones    | s:5 | e:1  | Date:31.03.2015
+```
 
-But the main purpose is to get a SMS on mobile phone about new episodes.
-I'm going to implement in using Twitter.com or vk.com API.
+But the main purpose is to get a SMS on mobile phone about new episodes, so script also sends a message to the needed accounts in vk.com. 
+Twitter functionality is implemented as well but not commited.
 

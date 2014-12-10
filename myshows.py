@@ -31,7 +31,11 @@ def computeMD5hash(password):
  
 
 def get_ses_id(login,password):
-    # method 'http://api.myshows.ru/profile/login?login=dezz&password=' + MD5 of the password
+    '''
+    This method gets session id from the cookies and return a dict 
+    which will be used in ofther requests
+    http://api.myshows.ru/profile/login?login=dezz&password= + MD5 of the password
+    '''
     url = 'http://api.myshows.ru/profile/login?login=' + login + '&password=' + computeMD5hash(password)
     r = requests.get(url)
     if r.status_code in (403, 404):
@@ -44,11 +48,15 @@ def get_ses_id(login,password):
 
 
 def id_to_title(showid):
+    '''Returns the name of the show according to the showID'''
     return shows_list[showid]
 
 
 def unwatched(cook):
-    # method http://api.myshows.ru/profile/episodes/unwatched/
+    '''
+    this one returns a list with unwached episodes sorted by date if they are exist.
+    Oftherwise it returns an empty list.
+    '''
     unwatched = 'http://api.myshows.ru/profile/episodes/unwatched/'
     unwatched_list = ['Unwatched :',]
     r2 = requests.get(unwatched, cookies=cook)
@@ -66,7 +74,11 @@ def unwatched(cook):
 
 
 def watch_soon(cook):
-    # method http://api.myshows.ru/profile/episodes/unwatched/
+    '''
+    Similar to the previous but calls another method
+    http://api.myshows.ru/profile/episodes/unwatched/ 
+    and returns upcomming episodes
+    '''
     method = 'http://api.myshows.me/profile/episodes/next/'
     watch_soon_list = ['Comming soon:',]
     r = requests.get(method, cookies=cook)
@@ -84,7 +96,7 @@ def watch_soon(cook):
 
 
 def message_send(userid, message):
-    ''' This func sends message to an appropriate user via vk.com '''
+    ''' This func sends message to appropriate users via vk.com '''
     user = str(userid)
     url = 'https://api.vk.com/method/messages.send?user_id={}&message={}&access_token={}'.format(user, quote(message), token)
     if args.debug:
@@ -94,8 +106,8 @@ def message_send(userid, message):
 
 if __name__ == "__main__":
 
-    token = 'decb1101f64a66241544771c10934efa666e9e0e8c' # vk access tocken
-    users = [111111111,] # list of the IDs 
+    token = 'decb1101f64a664fd05447e3f972aebccc1544771c10934efa666e9e0e8c' # vk access token
+    users = [1722242,2630060] # list of the IDs 13894710 (not domain names - ids only !)
 
     if not len(sys.argv) == 1:
         cook = get_ses_id(args.login,args.password)
@@ -103,13 +115,14 @@ if __name__ == "__main__":
         shows_list = {i['showId']:i['title'] for i in r3.values()}
         unwatched_list = unwatched(cook)
         watch_soon_list = watch_soon(cook)
-        if len(unwatched_list) > 1:
+
+        if len(unwatched_list) > 0:
             to_send = '\n'.join(i for i in unwatched_list)
             for i in users:
                 message_send(i,to_send)
                 time.sleep(5)
         else:
-            if len(watch_soon_list) > 1:
+            if len(watch_soon_list) > 0:
                 to_send = '\n'.join(i for i in watch_soon_list)
                 for i in users:
                     message_send(i,to_send)
