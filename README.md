@@ -13,14 +13,14 @@ python3 myshows.py -l mylogin -p mypassword
 #### Requirements :
 1) It is necessary to have accounts in the following social networks :
 
-`myshows.me` - for shows information
+`myshows.me` - for shows information <br>
 `vk.com`  or `twitter.com` - for sms purposes
 
 2) python3 and requests module
 
 ```bash
-sudo apt-get install python-pip
-sudo pip install requests
+sudo apt-get install python3-pip
+sudo pip3 install requests
 ```
 
 #### Typical output :
@@ -30,15 +30,13 @@ New episodes are:
 Физрук Физрук: серия 31 25.11.2014
 Физрук Физрук: серия 30 24.11.2014
 The Walking Dead Crossed 23.11.2014
-Comming soon :
-Show: Физрук             | s:2 | e:12 | Date:26.11.2014
-Show: Физрук             | s:2 | e:13 | Date:27.11.2014
-Show: The Walking Dead   | s:5 | e:8  | Date:30.11.2014
-Show: Физрук             | s:2 | e:14 | Date:01.12.2014
-Show: Физрук             | s:2 | e:15 | Date:02.12.2014
-Show: Физрук             | s:2 | e:16 | Date:03.12.2014
-Show: Физрук             | s:2 | e:17 | Date:04.12.2014
-Show: Game of Thrones    | s:5 | e:1  | Date:31.03.2015
+
+Comming soon:
+The Walking Dead | s:5 | e:9 | 08.02.2015
+Vikings | s:3 | e:1 | 19.02.2015
+Game of Thrones | s:5 | e:1 | 31.03.2015
+The Strain | s:2 | e:1 | 30.06.2015
+
 ```
 
 But the main purpose is to get a SMS on mobile phone about new episodes, so script also sends a message to the needed accounts in vk.com. 
