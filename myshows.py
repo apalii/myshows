@@ -11,7 +11,7 @@ import hashlib
 import sys
 import time
 import argparse
-try :
+try:
     import requests
 except ImportError:
     print('Please install requests module')
@@ -28,19 +28,19 @@ def computeMD5hash(password):
     m = hashlib.md5()
     m.update(password.encode('utf-8'))
     return m.hexdigest()
- 
+
 
 def get_ses_id(login,password):
-    '''
-    This method gets session id from the cookies and return a dict 
+    '''This method gets session id from the cookies and return a dict
     which will be used in ofther requests
-    http://api.myshows.ru/profile/login?login=dezz&password= + MD5 of the password
+    http://api.myshows.ru/profile/login?login=dezz&password= + pass
     '''
-    url = 'http://api.myshows.ru/profile/login?login=' + login + '&password=' + computeMD5hash(password)
+    base_url = 'http://api.myshows.ru/profile/login?login='
+    url = base_url + login + '&password=' + computeMD5hash(password)
     r = requests.get(url)
     if r.status_code in (403, 404):
         print('Required proper authrization !')
-        sys.exit(1)   
+        sys.exit(1)
     sesid = r.cookies['PHPSESSID']
     if args.debug:
         print(r.cookies)
@@ -48,13 +48,14 @@ def get_ses_id(login,password):
 
 
 def id_to_title(showid):
-    '''Returns the name of the show according to the showID'''
+    '''Returns the name of the show according to the showID
+    '''
     return shows_list[showid]
 
 
 def unwatched(cook):
-    '''
-    this one returns a list with unwached episodes sorted by date if they are exist.
+    '''This one returns a list with unwached episodes 
+    sorted by date if they are exist.
     Oftherwise it returns an empty list.
     '''
     unwatched = 'http://api.myshows.ru/profile/episodes/unwatched/'
@@ -64,18 +65,18 @@ def unwatched(cook):
     if args.debug:
         print(data)
     if not len(data) == 0:
-        for i in sorted(data.values(), key=lambda x:datetime.strptime(x['airDate'], '%d.%m.%Y').date()): # a bit weird code
-            line = '{} | s:{} | e:{} | {}'.format(id_to_title(i['showId']), i['seasonNumber'], 
-                                                              i['episodeNumber'],i['airDate'])
+        for i in sorted(data.values(),
+                        key=lambda x:datetime.strptime(x['airDate'], '%d.%m.%Y').date()):
+            line = '{} | s:{} | e:{} | {}'.format(id_to_title(i['showId']), i['seasonNumber'],
+                                                              i['episodeNumber'], i['airDate'])
             unwatched_list.append(line)
         return unwatched_list
-    else: 
+    else:
         return []
 
 
 def watch_soon(cook):
-    '''
-    Similar to the previous but calls another method
+    '''Similar to the previous but calls another method
     http://api.myshows.ru/profile/episodes/unwatched/ 
     and returns upcomming episodes
     '''
@@ -86,19 +87,21 @@ def watch_soon(cook):
     if args.debug:
         print(data)
     if not len(data) == 0:
-        for i in sorted(data.values(), key=lambda x:datetime.strptime(x['airDate'], '%d.%m.%Y').date()): # a bit weird code
-            line = '{} | s:{} | e:{} | {}'.format(id_to_title(i['showId']), i['seasonNumber'], 
-                                                              i['episodeNumber'],i['airDate'])
+        for i in sorted(data.values(), 
+                        key=lambda x:datetime.strptime(x['airDate'], '%d.%m.%Y').date()):
+            line = '{} | s:{} | e:{} | {}'.format(id_to_title(i['showId']), i['seasonNumber'],
+                                                              i['episodeNumber'], i['airDate'])
             watch_soon_list.append(line)
         return watch_soon_list
-    else: 
+    else:
         return []
 
 
 def message_send(userid, message):
     ''' This func sends message to appropriate users via vk.com '''
     user = str(userid)
-    url = 'https://api.vk.com/method/messages.send?user_id={}&message={}&access_token={}'.format(user, quote(message), token)
+    url = 'https://api.vk.com/method/messages.send?user_id={}&message={}&access_token={}'.format(
+                                                                     user, quote(message), token)
     if args.debug:
         print(url)
     response = requests.get(url).json()
@@ -106,12 +109,12 @@ def message_send(userid, message):
 
 if __name__ == "__main__":
 
-    token = 'decb1101f64a664fd05447e3f972aebccc1544771c10934efa666e9e0e8c' # vk access token
-    users = [1722242,2630060] # list of the IDs 13894710 (not domain names - ids only !)
+    token = 'decb1101f64a62aebccc1544771c10934efa666e9e0e8c'
+    users = [22429,13810] # list of the IDs  (not domain names - ids only !)
 
     if not len(sys.argv) == 1:
         cook = get_ses_id(args.login,args.password)
-        r3 = requests.get('http://api.myshows.me/profile/shows/', cookies=cook).json() 
+        r3 = requests.get('http://api.myshows.me/profile/shows/', cookies=cook).json()
         shows_list = {i['showId']:i['title'] for i in r3.values()}
         unwatched_list = unwatched(cook)
         watch_soon_list = watch_soon(cook)
