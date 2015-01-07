@@ -98,7 +98,8 @@ def watch_soon(cook):
 
 
 def message_send(userid, message):
-    ''' This func sends message to appropriate users via vk.com '''
+    '''This func sends message to appropriate users via vk.com 
+    '''
     user = str(userid)
     url = 'https://api.vk.com/method/messages.send?user_id={}&message={}&access_token={}'.format(
                                                                      user, quote(message), token)
