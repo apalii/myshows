@@ -1,16 +1,16 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
+import sys
+import time
+import time
+import hashlib
+import argparse
 from datetime import date
 from datetime import time
 from datetime import datetime
 from datetime import timedelta
 from urllib.request import quote
-import time
-import hashlib
-import sys
-import time
-import argparse
 try:
     import requests
 except ImportError:
