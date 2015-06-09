@@ -6,10 +6,8 @@ import time
 import time
 import hashlib
 import argparse
-from datetime import date
-from datetime import time
-from datetime import datetime
 from datetime import timedelta
+from datetime import date, time, datetime
 from urllib.request import quote
 try:
     import requests
