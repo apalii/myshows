@@ -1,4 +1,4 @@
-## myshows
+## myshows DEPRECATED !
 
 python3+requests
 
